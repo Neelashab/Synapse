@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: synapse
+  namespace: synapse
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: synapse
+  template:
+    metadata:
+      labels:
+        app: synapse
+    spec:
+      containers:
+        - name: synapse
+          image: matrixdotorg/synapse:latest
+          ports:
+            - containerPort: 8008
+            - containerPort: 8448
+          volumeMounts:
+            - mountPath: /data
+              name: synapse-data
+            - mountPath: /data/homeserver.yaml
+              name: synapse-config
+              subPath: homeserver.yaml
+            - mountPath: /data/cert.pem
+              name: synapse-cert
+              subPath: cert.pem
+            - mountPath: /data/key.pem
+              name: synapse-cert
+              subPath: key.pem
+            - mountPath: /data/my.matrix.host.log.config
+              name: synapse-log-config
+              subPath: my.matrix.host.log.config
+          env:
+            - name: SYNAPSE_SERVER_NAME
+              value: "10.71.155.61"
+            - name: SYNAPSE_REPORT_STATS
+              value: "yes"
+      volumes:
+        - name: synapse-data
+          persistentVolumeClaim:
+            claimName: synapse-pvc
+        - name: synapse-config
+          configMap:
+            name: synapse-config
+        - name: synapse-cert
+          secret:
+            secretName: synapse-cert
+        - name: synapse-log-config
+          configMap:
+            name: synapse-log-config

@@ -1,0 +1,40 @@
+pid_file: /data/homeserver.pid
+server_name: "172.18.0.2"
+public_baseurl: "http://172.18.0.2:8008/"
+
+# Federation settings
+federation_domain_whitelist: []
+
+# Listeners
+listeners:
+  - port: 8008
+    type: http
+    tls: false
+    x_forwarded: true
+    resources:
+      - names: [client, federation]
+        compress: false
+
+database:
+  name: psycopg2
+  args:
+    user: "synapse_user"
+    password: "synapse_password"
+    database: "synapse"
+    host: "postgres.synapse.svc.cluster.local"
+    port: 5432
+    allow_unsafe_locale: true
+
+log_config: "/data/my.matrix.host.log.config"
+media_store_path: /data/media_store
+
+registration_shared_secret: "^2,ld*9~Nl3xjYA6r*pIVmn7vEelDTyhb=1dMhU_wg4K=gWv_h"
+report_stats: true
+macaroon_secret_key: "+7wZmMfZrJ~^mf@I-r4q#s=cVkH*5f;B^ghjLEBJ:cq&,b2Dqr"
+form_secret: "EHQ-4G=KT~4;@4~:&^MCHtklVJAIp4GK_-TM;Kr4PE+~A7ape&"
+signing_key_path: "/data/my.matrix.host.signing.key"
+
+# vim:ft=yaml
+
+# Increase logging level to debug
+log_config: "/data/my.matrix.host.log.config"

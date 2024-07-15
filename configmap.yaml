@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: synapse-config
+  namespace: synapse
+data:
+  homeserver.yaml: |
+    # Server configuration
+    server_name: "my.matrix.host"
+    report_stats: yes
+
+    # Media store path
+    media_store_path: "/data/media_store"
+
+    # Trusted key servers
+    trusted_key_servers:
+      - server_name: "matrix.org"
+
+    suppress_key_server_warning: true
+
+    # Macaroon secret key (generate a random key)
+    macaroon_secret_key: "random_secret_key_here"
+
+    # Database configuration (PostgreSQL)
+    database:
+      name: "psycopg2"
+      args:
+        user: "synapse_user"
+        password: "synapse_password"
+        database: "synapse"
+        host: "postgres.synapse.svc.cluster.local"
+        port: 5432
+
+    # Logging configuration
+    log_config: "/data/homeserver.log.config"
+
+    # Enable registration without verification
+    enable_registration: true
+    enable_registration_without_verification: true
